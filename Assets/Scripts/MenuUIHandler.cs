@@ -13,11 +13,13 @@ public class MenuUIHandler : MonoBehaviour
     public InputField nameInput;
     public Text highScoreText;
     
+    
     // Start is called before the first frame update
     void Start()
     {
         if (DataSaver.Instance != null)
         {
+            DataSaver.Instance.LoadBestPlayer();
             highScoreText.text = DataSaver.Instance.bScoreText;
         }
     }

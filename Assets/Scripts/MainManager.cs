@@ -26,7 +26,8 @@ public class MainManager : MonoBehaviour
     {
         if (DataSaver.Instance != null && DataSaver.Instance.bScoreNum != 0)
         {
-            BestScoreText.text = "Best Score: " + DataSaver.Instance.playerName + ": " + DataSaver.Instance.bScoreNum;
+            DataSaver.Instance.LoadBestPlayer();
+            BestScoreText.text = DataSaver.Instance.bScoreText;
         }
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -68,6 +69,7 @@ public class MainManager : MonoBehaviour
                 BestScoreText.text = "Best Score: " + DataSaver.Instance.playerName + ": " + m_Points;
                 Debug.Log("No errs this far.");
                 DataSaver.Instance.bScoreText = BestScoreText.text;
+                DataSaver.Instance.SaveBestPlayer(m_Points);
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -90,31 +92,5 @@ public class MainManager : MonoBehaviour
         GameOverText.SetActive(true);
     }
 
-    public void SaveBestPlayer()
-    {
-        SaveData data = new SaveData();
-        data.bPlayerName = DataSaver.Instance.playerName;
-        data.bPlayerScore = m_Points;
-
-        string json = JsonUtility.ToJson(data);
-
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
-    }
-    
-    public void LoadBestPlayer()
-    {
-        string path = Application.persistentDataPath + "savefile.json";
-
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            SaveData data = JsonUtility.FromJson<SaveData>(json);
-        }
-    }
-    [System.Serializable]
-    class SaveData
-    {
-        public string bPlayerName;
-        public int bPlayerScore;
-    }
+   
 }
