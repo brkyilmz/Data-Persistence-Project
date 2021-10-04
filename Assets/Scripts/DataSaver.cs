@@ -7,7 +7,8 @@ public class DataSaver : MonoBehaviour
 {
     public static DataSaver Instance;
     public string playerName;
-    public Text bScoreText;
+    public string bScoreText;
+    public int bScoreNum;
 
     private void Awake()
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,6 +24,10 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (DataSaver.Instance != null && DataSaver.Instance.bScoreNum != 0)
+        {
+            BestScoreText.text = "Best Score: " + DataSaver.Instance.playerName + ": " + DataSaver.Instance.bScoreNum;
+        }
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -43,6 +48,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
+            ScoreText.text = $"{DataSaver.Instance.playerName} Score : {m_Points}";
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Started = true;
@@ -56,8 +62,13 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-            BestScoreText.text = "Best Score: " + DataSaver.Instance.playerName + ": " + m_Points;
-            DataSaver.Instance.bScoreText.text = BestScoreText.text;
+            if (m_Points > DataSaver.Instance.bScoreNum)
+            {
+                DataSaver.Instance.bScoreNum = m_Points;
+                BestScoreText.text = "Best Score: " + DataSaver.Instance.playerName + ": " + m_Points;
+                Debug.Log("No errs this far.");
+                DataSaver.Instance.bScoreText = BestScoreText.text;
+            }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -70,12 +81,40 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"{DataSaver.Instance.playerName} Score : {m_Points}";
     }
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    public void SaveBestPlayer()
+    {
+        SaveData data = new SaveData();
+        data.bPlayerName = DataSaver.Instance.playerName;
+        data.bPlayerScore = m_Points;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+    
+    public void LoadBestPlayer()
+    {
+        string path = Application.persistentDataPath + "savefile.json";
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+        }
+    }
+    [System.Serializable]
+    class SaveData
+    {
+        public string bPlayerName;
+        public int bPlayerScore;
     }
 }

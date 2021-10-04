@@ -18,7 +18,7 @@ public class MenuUIHandler : MonoBehaviour
     {
         if (DataSaver.Instance != null)
         {
-            highScoreText.text = DataSaver.Instance.bScoreText.text;
+            highScoreText.text = DataSaver.Instance.bScoreText;
         }
     }
 
