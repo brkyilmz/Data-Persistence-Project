@@ -19,6 +19,10 @@ public class MenuUIHandler : MonoBehaviour
     {
         if (DataSaver.Instance != null)
         {
+            // At the start of the game, the best player is loaded so that
+            // High score section can be shown
+            // After loading variables starting with "b" can be used to
+            // Retrieve the best player's data.
             DataSaver.Instance.LoadBestPlayer();
             highScoreText.text = DataSaver.Instance.bScoreText;
         }
@@ -44,9 +48,11 @@ public class MenuUIHandler : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    // These two functions can be merged
+
     public void NameSetter()
     {
-        chosenName = nameInput.text;
+        chosenName = nameInput.text; 
         Debug.Log(chosenName);
         NewNameCreated(chosenName);
     }

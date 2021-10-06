@@ -7,7 +7,10 @@ using UnityEngine.UI;
 public class DataSaver : MonoBehaviour
 {
     public static DataSaver Instance;
+    // Name chosen by the player in the current session
     public string playerName;
+
+    // Best player variables
     public string bScoreText;
     public int bScoreNum;
     public string bPlayerName;
@@ -22,7 +25,7 @@ public class DataSaver : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadBestPlayer();
+        LoadBestPlayer(); // I don't understand the point of this
     }
 
     public void SaveBestPlayer(int points)

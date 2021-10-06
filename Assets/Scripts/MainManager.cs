@@ -49,6 +49,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
+            //When the game starts, update the score section with the name user selected in menu, and their current score, which is 0
             ScoreText.text = $"{DataSaver.Instance.playerName} Score : {m_Points}";
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -63,6 +64,11 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            // The best score is loaded when this script starts
+            // When the game ends, if the score of the current player exceeds the loaded best
+            // Update best score variable with current best score
+            // Update best score section with current playername and current points
+            // Then, save this player as the new best one
             if (m_Points > DataSaver.Instance.bScoreNum)
             {
                 DataSaver.Instance.bScoreNum = m_Points;
